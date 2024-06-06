@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 import Pagination from "../pagination/Pagination";
 const ProductTable = () => {
   const [allProducts,,isLoading] = useAllProducts();
-  console.log(allProducts?.data?.data);
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
@@ -13,21 +12,22 @@ const ProductTable = () => {
     return <Box sx={{
         display: 'flex',
         justifyContent: 'center',
+        marginTop:  '6rem',
       }}>
-      <CircularProgress />
+      <CircularProgress sx={{ color: '#0F9ED5' }} />
     </Box>
 
   return (
-    <div className="px-4">
-      <table className="w-full border-separate border-spacing-2">
+    <div className="px-1 md:px-4">
+      <table className="w-full border-separate">
         <thead>
           <tr className="text-center bg-[#0F9ED5] text-white ">
-            <th className="px-4 py-2">ID</th>
-            <th>Name</th>
-            <th>Brand</th>
-            <th className=" ">Type</th>
-            <th>Created At </th>
-            <th>Actions</th>
+            <th className="px-1 py-2 hidden md:block">ID</th>
+            <th className="px-1 py-2">Name</th>
+            <th className="px-1 py-2">Brand</th>
+            <th className="px-1 py-2">Type</th>
+            <th className="px-1 py-2 hidden md:block">Created At </th>
+            <th className="px-1 py-2">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -36,12 +36,12 @@ const ProductTable = () => {
               key={idx}
               className="text-sm lg:font-medium  odd:bg-[#CCDFEF] even:bg-[#E7F0F7] text-center"
             >
-              <td className=" py-4 px-1">{(idx+1)}</td>
-              <td className="py-4 px-1">{product.name}</td>
-              <td className="py-4 px-1">{product.brand}</td>
-              <td className=" py-4 px-1 ">{product.type}</td>
-              <td className="py-4 px-1">{formatDate(product.created_at)}</td>
-              <td className="py-4 px-1 text-red-400 space-x-1">
+              <td className=" px-1 py-2 hidden md:block">{(idx+1)}</td>
+              <td className="px-1 py-2">{product.name}</td>
+              <td className="px-1 py-2">{product.brand}</td>
+              <td className=" px-1 py-2 ">{product.type}</td>
+              <td className="px-1 py-2 hidden md:block">{formatDate(product.created_at)}</td>
+              <td className="px-1 py-2 text-red-400 space-x-1">
                 <span className="cursor-pointer hover:text-red-600">View </span>
                 |
                 <span className="cursor-pointer hover:text-red-600">Edit </span>
