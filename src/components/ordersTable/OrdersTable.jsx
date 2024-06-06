@@ -1,49 +1,25 @@
 import useAllProducts from "../../hooks/useAllProducts";
-import CircularProgress from "@mui/material/CircularProgress";
-import Box from "@mui/material/Box";
 import AddButton from "../shared/button/AddButton";
 import Pagination from "../shared/pagination/Pagination";
 import SearchInput from "../shared/button/SearchInput";
 import Header from "../shared/header/Header";
-import { useState } from "react";
-import CreateModal from './../modal/CreateModal';
-const ProductTable = () => {
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const openCreateModal = () => {
-    setShowCreateModal(true);
-  };
-  const closeCreateModal = () => {
-    setShowCreateModal(false);
-  };
-  const [allProducts, , isLoading] = useAllProducts();
-  
+const OrdersTable = () => {
+  const [allProducts, ] = useAllProducts();
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
-  if (isLoading)
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          marginTop: "6rem",
-        }}
-      >
-        <CircularProgress sx={{ color: "#0F9ED5" }} />
-      </Box>
-    );
+ 
   const handleSearch = (searchTerm) => {
     console.log("Searching for:", searchTerm);
   };
 
   return (
-    <div className="">
-      <Header>{"Product"}</Header>
+    <div className="mt-48">
+      <Header>{"Orders"}</Header>
       <div className="px-1 md:px-4">
         <div className="flex justify-between mt-12 mb-3">
-          <AddButton onClick={openCreateModal}>Create</AddButton>
-          {showCreateModal && <CreateModal closeCreateModal={closeCreateModal} />}
+          <AddButton>Create</AddButton>
           <SearchInput onSearch={handleSearch} />
         </div>
         <table className="w-full border-separate">
@@ -98,4 +74,4 @@ const ProductTable = () => {
   );
 };
 
-export default ProductTable;
+export default OrdersTable;

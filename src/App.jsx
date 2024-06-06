@@ -1,14 +1,11 @@
-import Header from "./components/header/Header"
+import OrdersTable from "./components/ordersTable/OrdersTable"
 import ProductTable from "./components/productTable/ProductTable"
-
 function App() {
 
   return (
     <div>
-    <Header>
-      {"Product"}
-    </Header>
     <ProductTable/>
+    <OrdersTable/>
     </div>
   )
 }
