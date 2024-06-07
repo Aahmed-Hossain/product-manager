@@ -13,7 +13,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 const ProductTable = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
-
+  const [searchedProducts, setSearchedProducts] = useState([]);
+  console.log(searchedProducts.data)
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -57,21 +58,36 @@ const ProductTable = () => {
         <CircularProgress sx={{ color: "#0F9ED5" }} />
       </Box>
     );
-  const handleSearch = (searchTerm) => {
+
+
+   const handleSearch = async (searchTerm) => {
     console.log("Searching for:", searchTerm);
-  };
+    try {
+      const response = await axios.get(`https://reactjr.coderslab.online/api/products`, {
+        params: {
+          search: searchTerm,
+          per_page: 10
+        }
+      });
+      setSearchedProducts(response.data.data);
+    } catch (err) {
+      console.error(err.message);
+    } 
+  }
+
+
   const handleDelete = (id) => {
     axios.delete(`https://reactjr.coderslab.online/api/products/${id}`)
       .then((response) => {
         console.log(response)
-        toast.success(`Product Deleted Successully `);
+        toast.success(`Product Deleted Successfully `);
         refetch();
       })
       .catch((error) => {
         console.error("Error deleting the item:", error);
       });
   };
-
+  // const productsToDisplay = searchedProducts?.data?.length > 0 ? searchedProducts?.data : allProducts;
   return (
     <div className="">
       <Header>{"Product"}</Header>
@@ -79,7 +95,7 @@ const ProductTable = () => {
         <div className="flex justify-between mt-12 mb-3">
           <AddButton onClick={openCreateModal}>Create</AddButton>
           {showCreateModal && <CreateModal closeModal={closeModal} refetch={refetch} />}
-          <SearchInput onSearch={handleSearch} />
+          <SearchInput onSearch={handleSearch}  />
         </div>
         <table className="w-full border-separate">
           <thead>

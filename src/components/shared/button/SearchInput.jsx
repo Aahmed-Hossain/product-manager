@@ -16,7 +16,7 @@ const SearchInput = ({ onSearch }) => {
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
-      handleSearch();
+      handleSearch(); 
       setSearchTerm('');
     }
   };
