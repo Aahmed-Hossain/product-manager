@@ -3,7 +3,7 @@
 import TextField from "@mui/material/TextField";
 import { Box,FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
-const ViewModal = ({ closeViewModal,product }) => {
+const ViewModal = ({ closeModal,product }) => {
     const {name, brand, type, origin, variants} = product;
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -116,7 +116,7 @@ const ViewModal = ({ closeViewModal,product }) => {
             <button
               type="button"
               className="bg-[#83CBEB] hover:bg-[#5ebae2] text-white py-1 rounded-md border-2 border-blue-500 px-4"
-              onClick={closeViewModal}
+              onClick={closeModal}
             >
               Close
             </button>

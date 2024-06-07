@@ -7,7 +7,7 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import axios from "axios";
 
-const CreateModal = ({ closeCreateModal,refetch }) => {
+const CreateModal = ({ closeModal,refetch }) => {
   const [type, setType] = useState('');
   const [variants, setVariants] = useState([{ id: Date.now() }]);
 
@@ -37,7 +37,7 @@ const CreateModal = ({ closeCreateModal,refetch }) => {
       toast.success(`Product created successfully.`);
       refetch();
       reset();
-      closeCreateModal();
+      closeModal();
     }).catch((err) => {
       if (err.response) {
         toast.error(`Something went wrong`);
@@ -214,7 +214,7 @@ const CreateModal = ({ closeCreateModal,refetch }) => {
             <button
               type="button"
               className="bg-[#83CBEB] hover:bg-[#5ebae2] text-white py-1 rounded-md border-2 border-blue-500 px-4"
-              onClick={closeCreateModal}
+              onClick={closeModal}
             >
               Close
             </button>

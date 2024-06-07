@@ -8,25 +8,37 @@ import Header from "../shared/header/Header";
 import { useState } from "react";
 import CreateModal from './../modal/CreateModal';
 import ViewModal from "../modal/ViewModal";
+import EditProductModal from "../modal/EditProductModal";
 const ProductTable = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
+
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+
   const openCreateModal = () => {
     setShowCreateModal(true);
   };
-  const closeCreateModal = () => {
+
+  const closeModal = () => {
+    setShowViewModal(false);
     setShowCreateModal(false);
+    setShowEditModal(false);
   };
-  const [showViewModal, setShowViewModal] = useState(false);
+
+  
   const openViewModal = (product) => {
     setSelectedProduct(product);
     setShowViewModal(true);
   };
-  const closeViewModal = () => {
-    setShowViewModal(false);
+
+  const openEditModal = (product) => {
+    setSelectedProduct(product);
+    setShowEditModal(true);
   };
+
+
   const [allProducts, refetch , isLoading] = useAllProducts();
-  
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
@@ -53,7 +65,7 @@ const ProductTable = () => {
       <div className="px-1 md:px-4">
         <div className="flex justify-between mt-12 mb-3">
           <AddButton onClick={openCreateModal}>Create</AddButton>
-          {showCreateModal && <CreateModal closeCreateModal={closeCreateModal} refetch={refetch} />}
+          {showCreateModal && <CreateModal closeModal={closeModal} refetch={refetch} />}
           <SearchInput onSearch={handleSearch} />
         </div>
         <table className="w-full border-separate">
@@ -84,11 +96,12 @@ const ProductTable = () => {
                   <button onClick={() => openViewModal(product)} className="cursor-pointer hover:text-red-600">
                     View
                   </button>
-                  {showViewModal && <ViewModal closeViewModal={closeViewModal}  product={selectedProduct}/>}
+                  {showViewModal && <ViewModal closeModal={closeModal}  product={selectedProduct}/>}
                   |
-                  <button className="cursor-pointer hover:text-red-600">
+                  <button onClick={() => openEditModal(product)} className="cursor-pointer hover:text-red-600">
                     Edit
                   </button>
+                  {showEditModal && <EditProductModal closeModal={closeModal} refetch={refetch}  product={selectedProduct}/>}
                   |
                   <button className="cursor-pointer hover:text-red-600">
                     Delete
