@@ -15,7 +15,7 @@ const ProductTable = () => {
   const closeCreateModal = () => {
     setShowCreateModal(false);
   };
-  const [allProducts, , isLoading] = useAllProducts();
+  const [allProducts, refetch , isLoading] = useAllProducts();
   
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
@@ -43,7 +43,7 @@ const ProductTable = () => {
       <div className="px-1 md:px-4">
         <div className="flex justify-between mt-12 mb-3">
           <AddButton onClick={openCreateModal}>Create</AddButton>
-          {showCreateModal && <CreateModal closeCreateModal={closeCreateModal} />}
+          {showCreateModal && <CreateModal closeCreateModal={closeCreateModal} refetch={refetch} />}
           <SearchInput onSearch={handleSearch} />
         </div>
         <table className="w-full border-separate">

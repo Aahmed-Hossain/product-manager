@@ -1,20 +1,62 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import TextField from "@mui/material/TextField";
-import { Box } from "@mui/material";
+import { Box, Button, Checkbox, FormControl, InputLabel, ListItemText, MenuItem, OutlinedInput, Select } from "@mui/material";
 import { toast } from "react-toastify";
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import axios from "axios";
 
-const CreateModal = ({ closeCreateModal }) => {
+const CreateModal = ({ closeCreateModal,refetch }) => {
+  const [type, setType] = useState('');
+  const [variants, setVariants] = useState([{ id: Date.now() }]);
+
+  const handleChange = (event) => {
+    setType(event.target.value);
+  };
+
+
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
 
   const onSubmit = (data) => {
     console.log(data);
-    toast.success(`Added the Food:`);
-    closeCreateModal();
+    console.log(data.variants)
+    const newProduct = {
+      _methods: "PUT",
+      name: data.name,
+      brand: data.brand,
+      type: data.type,
+      origin: data.origin,
+      variants: data.variants
+    }
+    console.log('newProduct' ,newProduct)
+    axios.post(`https://reactjr.coderslab.online/api/products`,newProduct).then((res) => {
+      console.log(res);
+      toast.success(`Product created successfully.`);
+      refetch();
+      reset();
+      closeCreateModal();
+    }).catch((err) => {
+      console.error("Errors:", err);
+      if (err.response) {
+        toast.error(`Something went wrong`);
+        // console.error("Error data:", err.response.data);
+        // console.error("Error status:", err.response.status);
+        // console.error("Error headers:", err.response.headers);
+      }
+    });
+  };
+
+  const addVariant = () => {
+    setVariants([...variants, { id: Date.now() }]);
+  };
+  const removeVariant = (id) => {
+    setVariants(variants.filter(variant => variant.id !== id));
   };
 
   return (
@@ -26,12 +68,13 @@ const CreateModal = ({ closeCreateModal }) => {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Box sx={{ display: 'flex', justifyContent: 'center',}}>
         <Box className="grid grid-cols-2 gap-2 w-10/12 md:w-2/3  justify-items-center">
+
             <Box sx={{ width: "100%" }}>
               <TextField
                 sx={{ width: "100%" }}
-                {...register("name", { required: "Name is required" })}
+                {...register("name", { required: "Type is required" })}
                 id="outlined-name-input"
-                label="Food Title"
+                label="Name"
                 type="text"
               />
               {errors.name && (
@@ -42,50 +85,56 @@ const CreateModal = ({ closeCreateModal }) => {
             <Box sx={{ width: "100%" }}>
               <TextField
                 sx={{ width: "100%" }}
-                {...register("description", {
-                  required: "Description is required",
+                {...register("brand", {
+                  required: "brand is required",
                 })}
-                id="outlined-description-input"
-                label="Food Description"
+                id="outlined-brand-input"
+                label="Brand"
                 type="text"
               />
-              {errors.description && (
-                <span className="text-red-500">Description is required</span>
+              {errors.brand && (
+                <span className="text-red-500">Brand is required</span>
               )}
             </Box >
 
             <Box sx={{ width: "100%" }}>
-              <TextField
-                sx={{ width: "100%" }}
-                {...register("price", {
-                  required: "Price is required",
-                  valueAsNumber: true,
-                })}
-                id="outlined-price-input"
-                label="Food Price"
-                type="number"
-                inputProps={{ step: "0.01" }}
-              />
-              {errors.price && (
-                <span className="text-red-500">Price is required</span>
-              )}
-            </Box>
+            <FormControl sx={{ width: "100%" }}>
+ <InputLabel id="demo-simple-select-autowidth-label">Type</InputLabel>
+        <Select 
+        sx={{ width: "100%" }}
+        {...register("type", {
+          required: "Type is required",
+        })}
+          labelId="demo-simple-select-autowidth-label"
+          id="demo-simple-select-autowidth"
+          value={type}
+          onChange={handleChange}
+          autoWidth
+          label="Type"
+        >
+          <MenuItem sx={{ width: "100%" }} value={'Mug'}>Mug</MenuItem>
 
-
+          <MenuItem sx={{ width: "100%" }} value={'Cup'}>Cup</MenuItem>
+          <MenuItem sx={{ width: "100%" }} value={'Glass'}>Glass</MenuItem>
+ 
+        </Select>
+        </FormControl>
+          {errors.items && (
+            <span className="text-red-500">*Type is required</span>
+          )}
+        </Box>
             <Box sx={{ width: "100%" }}>
             <TextField
               sx={{ width: "100%" }}
-              {...register("price", {
-                required: "Price is required",
-                valueAsNumber: true,
+              {...register("origin", {
+                required: "origin is required",
               })}
-              id="outlined-price-input"
-              label="Food Price"
-              type="number"
-              inputProps={{ step: "0.01" }}
+              id="outlined-origin-input"
+              label="Origin"
+              type="text"
             />
-            {errors.price && (
-              <span className="text-red-500">Price is required</span>
+            {errors.origin && (
+              <span className="text-red-500">Origin is required</span>
             )}
           </Box>
 
@@ -94,62 +143,86 @@ const CreateModal = ({ closeCreateModal }) => {
         </Box>
 
           
+<h3 className="text-xl font-semibold my-8 md:my-24 text-center">Variants</h3>
 
-          <Box sx={{ width: "100%" }}>
-            <TextField
-              sx={{ width: "100%" }}
-              {...register("color", {
-                required: "Color is required",
-              })}
-              id="outlined-color-input"
-              label="Color"
-              type="text"
-            />
-            {errors.price && (
-              <span className="text-red-500">Color is required</span>
-            )}
-          </Box>
+{variants.map((variant, index) => (
+            <Box key={variant.id} className="flex justify-between gap-2 w-full">
+              <Box sx={{ width: "100%" }}>
+                <TextField
+                  sx={{ width: "100%" }}
+                  {...register(`variants[${index}].color`, { required: "Color is required" })}
+                  id={`outlined-color-input-${variant.id}`}
+                  label="Color"
+                  type="text"
+                />
+                {errors.variants?.[index]?.color && (
+                  <span className="text-red-500">Color is required</span>
+                )}
+              </Box>
 
-          <Box sx={{ width: "100%" }}>
-            <TextField
-              sx={{ width: "100%" }}
-              {...register("specification", {
-                required: "specification is required",
-              })}
-              id="outlined-specification-input"
-              label="Specification"
-              type="text"
-            />
-            {errors.price && (
-              <span className="text-red-500">Specification is required</span>
-            )}
-          </Box>
+              <Box sx={{ width: "100%" }}>
+                <TextField
+                  sx={{ width: "100%" }}
+                  {...register(`variants[${index}].specification`, { required: "Specification is required" })}
+                  id={`outlined-specification-input-${variant.id}`}
+                  label="Specification"
+                  type="text"
+                />
+                {errors.variants?.[index]?.specification && (
+                  <span className="text-red-500">Specification is required</span>
+                )}
+              </Box>
 
-          <Box sx={{ width: "100%" }}>
-            <TextField
-              sx={{ width: "100%" }}
-              {...register("size", {
-                required: "size is required",
-              })}
-              id="outlined-size-input"
-              label="Size"
-              type="text"
-            />
-            {errors.price && (
-              <span className="text-red-500">Size is required</span>
-            )}
-          </Box>
-          
+              <Box sx={{ width: "100%" }}>
+                <TextField
+                  sx={{ width: "100%" }}
+                  {...register(`variants[${index}].size`, { required: "Size is required" })}
+                  id={`outlined-size-input-${variant.id}`}
+                  label="Size"
+                  type="text"
+                />
+                {errors.variants?.[index]?.size && (
+                  <span className="text-red-500">Size is required</span>
+                )}
+              </Box>
+
+              <Box sx={{ display: 'flex', gap: '5px' }}>
+                <Button
+                  sx={{
+                    backgroundColor: '#83CBEB',
+                    color: 'white',
+                    '&:hover': { backgroundColor: '#66B2D6', color: 'white' }
+                  }}
+                  onClick={addVariant}
+                >
+                  <AddIcon />
+                </Button>
+                {variants.length > 1 && (
+                  <Button
+                    sx={{
+                      backgroundColor: '#83CBEB',
+                      color: 'white',
+                      '&:hover': { backgroundColor: '#66B2D6', color: 'white' }
+                    }}
+                    onClick={() => removeVariant(variant.id)}
+                  >
+                    <RemoveIcon />
+                  </Button>
+                )}
+              </Box>
+            </Box>
+          ))}
+
 
           <div className="flex justify-end space-x-2">
             <button
               type="button"
-              className="px-2 py-1 rounded-md bg-red-200"
+              className="bg-[#83CBEB] hover:bg-[#5ebae2] text-white py-1 rounded-md border-2 border-blue-500 px-4"
               onClick={closeCreateModal}
             >
               Close
             </button>
-            <button type="submit" className="px-2 py-1 rounded-md bg-green-200">
+            <button type="submit" className=" bg-[#83CBEB] hover:bg-[#5ebae2] text-white py-1 rounded-md border-2 border-blue-500 px-4">
               Submit
             </button>
           </div>
