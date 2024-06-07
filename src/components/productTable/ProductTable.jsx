@@ -9,6 +9,8 @@ import { useState } from "react";
 import CreateModal from './../modal/CreateModal';
 import ViewModal from "../modal/ViewModal";
 import EditProductModal from "../modal/EditProductModal";
+import axios from "axios";
+import { toast } from "react-toastify";
 const ProductTable = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
 
@@ -58,6 +60,17 @@ const ProductTable = () => {
   const handleSearch = (searchTerm) => {
     console.log("Searching for:", searchTerm);
   };
+  const handleDelete = (id) => {
+    axios.delete(`https://reactjr.coderslab.online/api/products/${id}`)
+      .then((response) => {
+        console.log(response)
+        toast.success(`Product Deleted Successully `);
+        refetch();
+      })
+      .catch((error) => {
+        console.error("Error deleting the item:", error);
+      });
+  };
 
   return (
     <div className="">
@@ -103,7 +116,7 @@ const ProductTable = () => {
                   </button>
                   {showEditModal && <EditProductModal closeModal={closeModal} refetch={refetch}  product={selectedProduct}/>}
                   |
-                  <button className="cursor-pointer hover:text-red-600">
+                  <button onClick={()=> handleDelete(product.id)} className="cursor-pointer hover:text-red-600">
                     Delete
                   </button>
                 </td>
