@@ -99,7 +99,7 @@ const EditProductModal = ({ closeCreateModal, product,refetch }) => {
         })}
           labelId="demo-simple-select-autowidth-label"
           id="demo-simple-select-autowidth"
-          defaultValue={typeValue}
+          defaultValue={type}
           onChange={handleChange}
           autoWidth
           label="Type"
