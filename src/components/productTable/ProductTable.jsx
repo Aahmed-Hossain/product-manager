@@ -7,13 +7,23 @@ import SearchInput from "../shared/button/SearchInput";
 import Header from "../shared/header/Header";
 import { useState } from "react";
 import CreateModal from './../modal/CreateModal';
+import ViewModal from "../modal/ViewModal";
 const ProductTable = () => {
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const openCreateModal = () => {
     setShowCreateModal(true);
   };
   const closeCreateModal = () => {
     setShowCreateModal(false);
+  };
+  const [showViewModal, setShowViewModal] = useState(false);
+  const openViewModal = (product) => {
+    setSelectedProduct(product);
+    setShowViewModal(true);
+  };
+  const closeViewModal = () => {
+    setShowViewModal(false);
   };
   const [allProducts, refetch , isLoading] = useAllProducts();
   
@@ -71,17 +81,18 @@ const ProductTable = () => {
                   {formatDate(product.created_at)}
                 </td>
                 <td className="px-1 py-2 text-red-400 space-x-1">
-                  <span className="cursor-pointer hover:text-red-600">
-                    View{" "}
-                  </span>
+                  <button onClick={() => openViewModal(product)} className="cursor-pointer hover:text-red-600">
+                    View
+                  </button>
+                  {showViewModal && <ViewModal closeViewModal={closeViewModal}  product={selectedProduct}/>}
                   |
-                  <span className="cursor-pointer hover:text-red-600">
-                    Edit{" "}
-                  </span>
+                  <button className="cursor-pointer hover:text-red-600">
+                    Edit
+                  </button>
                   |
-                  <span className="cursor-pointer hover:text-red-600">
+                  <button className="cursor-pointer hover:text-red-600">
                     Delete
-                  </span>
+                  </button>
                 </td>
               </tr>
             ))}

@@ -1,21 +1,19 @@
-import React, { useState } from "react";
+/* eslint-disable react/prop-types */
+import  { useState } from "react";
 import { useForm } from "react-hook-form";
 import TextField from "@mui/material/TextField";
-import { Box, Button, Checkbox, FormControl, InputLabel, ListItemText, MenuItem, OutlinedInput, Select } from "@mui/material";
+import { Box,FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { toast } from "react-toastify";
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
 import axios from "axios";
 
-const CreateModal = ({ closeCreateModal,refetch }) => {
-  const [type, setType] = useState('');
-  const [variants, setVariants] = useState([{ id: Date.now() }]);
-
-  const handleChange = (event) => {
-    setType(event.target.value);
-  };
-
-
+const EditProductModal = ({ closeCreateModal, product,refetch }) => {
+    const {name, brand, type, origin, variants} = product;
+    console.log(product)
+    const [typeValue, setTypeValue] = useState('');
+  
+    const handleChange = (event) => {
+        setTypeValue(event.target.value);
+    };
   const {
     register,
     handleSubmit,
@@ -24,21 +22,24 @@ const CreateModal = ({ closeCreateModal,refetch }) => {
   } = useForm();
 
   const onSubmit = (data) => {
-    const newProduct = {
-      _methods: "PUT",
+    console.log(data);
+    console.log(data.variants)
+    const updatedProduct = {
       name: data.name,
       brand: data.brand,
       type: data.type,
       origin: data.origin,
       variants: data.variants
     }
-    console.log('newProduct' ,newProduct)
-    axios.post(`https://reactjr.coderslab.online/api/products`,newProduct).then((res) => {
+    console.log('updatedProduct' ,updatedProduct)
+    axios.post(`https://reactjr.coderslab.online/api/produc`,updatedProduct).then((res) => {
+      console.log(res);
       toast.success(`Product created successfully.`);
       refetch();
       reset();
       closeCreateModal();
     }).catch((err) => {
+      console.error("Errors:", err);
       if (err.response) {
         toast.error(`Something went wrong`);
         // console.error("Error data:", err.response.data);
@@ -46,13 +47,6 @@ const CreateModal = ({ closeCreateModal,refetch }) => {
         // console.error("Error headers:", err.response.headers);
       }
     });
-  };
-
-  const addVariant = () => {
-    setVariants([...variants, { id: Date.now() }]);
-  };
-  const removeVariant = (id) => {
-    setVariants(variants.filter(variant => variant.id !== id));
   };
 
   return (
@@ -72,6 +66,7 @@ const CreateModal = ({ closeCreateModal,refetch }) => {
                 id="outlined-name-input"
                 label="Name"
                 type="text"
+                defaultValue={name}
               />
               {errors.name && (
                 <span className="text-red-500">Name is required</span>
@@ -87,6 +82,7 @@ const CreateModal = ({ closeCreateModal,refetch }) => {
                 id="outlined-brand-input"
                 label="Brand"
                 type="text"
+                defaultValue={brand}
               />
               {errors.brand && (
                 <span className="text-red-500">Brand is required</span>
@@ -103,13 +99,12 @@ const CreateModal = ({ closeCreateModal,refetch }) => {
         })}
           labelId="demo-simple-select-autowidth-label"
           id="demo-simple-select-autowidth"
-          value={type}
+          defaultValue={typeValue}
           onChange={handleChange}
           autoWidth
           label="Type"
         >
           <MenuItem sx={{ width: "100%" }} value={'Mug'}>Mug</MenuItem>
-
           <MenuItem sx={{ width: "100%" }} value={'Cup'}>Cup</MenuItem>
           <MenuItem sx={{ width: "100%" }} value={'Glass'}>Glass</MenuItem>
  
@@ -128,6 +123,7 @@ const CreateModal = ({ closeCreateModal,refetch }) => {
               id="outlined-origin-input"
               label="Origin"
               type="text"
+              defaultValue={origin}
             />
             {errors.origin && (
               <span className="text-red-500">Origin is required</span>
@@ -141,73 +137,42 @@ const CreateModal = ({ closeCreateModal,refetch }) => {
           
 <h3 className="text-xl font-semibold my-8 md:my-24 text-center">Variants</h3>
 
-{variants.map((variant, index) => (
-            <Box key={variant.id} className="flex justify-between gap-2 w-full">
-              <Box sx={{ width: "100%" }}>
+{
+    variants?.map((variant, idx)=> (
+<Box key={idx} className="flex justify-between gap-2 w-full">
+              <Box  sx={{ width: "100%" }}>
                 <TextField
                   sx={{ width: "100%" }}
-                  {...register(`variants[${index}].color`, { required: "Color is required" })}
-                  id={`outlined-color-input-${variant.id}`}
+                  id={`outlined-color-input`}
                   label="Color"
                   type="text"
+              defaultValue={variant?.color}
                 />
-                {errors.variants?.[index]?.color && (
-                  <span className="text-red-500">Color is required</span>
-                )}
               </Box>
 
               <Box sx={{ width: "100%" }}>
                 <TextField
                   sx={{ width: "100%" }}
-                  {...register(`variants[${index}].specification`, { required: "Specification is required" })}
-                  id={`outlined-specification-input-${variant.id}`}
+                  id={`outlined-specification-input`}
                   label="Specification"
                   type="text"
+                  defaultValue={variant?.specification}
                 />
-                {errors.variants?.[index]?.specification && (
-                  <span className="text-red-500">Specification is required</span>
-                )}
               </Box>
 
               <Box sx={{ width: "100%" }}>
                 <TextField
                   sx={{ width: "100%" }}
-                  {...register(`variants[${index}].size`, { required: "Size is required" })}
-                  id={`outlined-size-input-${variant.id}`}
+                  id={`outlined-size-input`}
                   label="Size"
                   type="text"
+                  defaultValue={variant?.size}
                 />
-                {errors.variants?.[index]?.size && (
-                  <span className="text-red-500">Size is required</span>
-                )}
               </Box>
 
-              <Box sx={{ display: 'flex', gap: '5px' }}>
-                <Button
-                  sx={{
-                    backgroundColor: '#83CBEB',
-                    color: 'white',
-                    '&:hover': { backgroundColor: '#66B2D6', color: 'white' }
-                  }}
-                  onClick={addVariant}
-                >
-                  <AddIcon />
-                </Button>
-                {variants.length > 1 && (
-                  <Button
-                    sx={{
-                      backgroundColor: '#83CBEB',
-                      color: 'white',
-                      '&:hover': { backgroundColor: '#66B2D6', color: 'white' }
-                    }}
-                    onClick={() => removeVariant(variant.id)}
-                  >
-                    <RemoveIcon />
-                  </Button>
-                )}
-              </Box>
             </Box>
-          ))}
+    ))
+}
 
 
           <div className="flex justify-end space-x-2">
@@ -228,4 +193,4 @@ const CreateModal = ({ closeCreateModal,refetch }) => {
   );
 };
 
-export default CreateModal;
+export default EditProductModal;

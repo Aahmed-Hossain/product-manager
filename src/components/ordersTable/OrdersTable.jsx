@@ -1,10 +1,10 @@
-import useAllProducts from "../../hooks/useAllProducts";
 import AddButton from "../shared/button/AddButton";
 import Pagination from "../shared/pagination/Pagination";
 import SearchInput from "../shared/button/SearchInput";
 import Header from "../shared/header/Header";
+import useAllOrders from "../../hooks/useAllOrders";
 const OrdersTable = () => {
-  const [allProducts, ] = useAllProducts();
+  const [allOrders, ] = useAllOrders();
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
@@ -34,7 +34,7 @@ const OrdersTable = () => {
             </tr>
           </thead>
           <tbody>
-            {allProducts?.data?.data?.map((product, idx) => (
+            {allOrders?.data?.data?.map((product, idx) => (
               <tr
                 key={idx}
                 className="text-sm lg:font-medium  odd:bg-[#CCDFEF] even:bg-[#E7F0F7] text-center"
@@ -47,17 +47,17 @@ const OrdersTable = () => {
                   {formatDate(product.created_at)}
                 </td>
                 <td className="px-1 py-2 text-red-400 space-x-1">
-                  <span className="cursor-pointer hover:text-red-600">
-                    View{" "}
-                  </span>
+                  <button className=" hover:text-red-600">
+                    View
+                  </button>
                   |
-                  <span className="cursor-pointer hover:text-red-600">
-                    Edit{" "}
-                  </span>
+                  <button className=" hover:text-red-600">
+                    Edit
+                  </button>
                   |
-                  <span className="cursor-pointer hover:text-red-600">
+                  <button className=" hover:text-red-600">
                     Delete
-                  </span>
+                  </button>
                 </td>
               </tr>
             ))}
