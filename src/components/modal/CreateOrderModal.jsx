@@ -2,14 +2,15 @@
 import { Checkbox } from "@mui/material";
 import useAllProducts from "../../hooks/useAllProducts";
 import SearchInput from "../shared/button/SearchInput";
-import { useContext, useState } from "react";
+import {  useState } from "react";
 import SelectVariants from "../createOrders/SelectVariants";
 import OrderInfo from "../createOrders/OrderInfo";
-import { AuthContext } from "../../providers/AuthProvider";
+import axios from "axios";
+import { toast } from "react-toastify";
+import useAllOrders from "../../hooks/useAllOrders";
 
 const CreateOrderModal = ({ closeModal }) => {
-    const { selectedDetails} = useContext(AuthContext);
-    console.log("selectedDetails from modal", selectedDetails)
+   const  [, refetch] = useAllOrders();
     const [activeComponent, setActiveComponent] = useState(1);
     const [selectedProducts, setSelectedProducts] = useState([]);
   const [allProducts, , , , , handleSearch, seachQuery] = useAllProducts();
@@ -20,16 +21,32 @@ const CreateOrderModal = ({ closeModal }) => {
       if (checked) {
         return [...prevSelectedProducts, product];
       } else {
-        // Remove the product from the selected products array if it's unchecked
         return prevSelectedProducts.filter(p => p.id !== product.id);
       }
     });
   };
 
-  // Check if a product is selected
   const isProductSelected = (product) => {
     return selectedProducts.some(p => p.id === product.id);
   };
+  const handleSubmitOrder = (orderData) => {
+    console.log(orderData);
+    axios.post(`https://reactjr.coderslab.online/api/orders`,orderData).then((res) => {
+        console.log(res.data)
+        toast.success(`Product created successfully.`);
+        refetch();
+        closeModal();
+      }).catch((err) => {
+        if (err.response) {
+          toast.error(`Something went wrong`);
+          // console.error("Error data:", err.response.data);
+          // console.error("Error status:", err.response.status);
+          // console.error("Error headers:", err.response.headers);
+        }
+      });
+
+  }
+
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-30">
@@ -86,7 +103,7 @@ inputProps={{ "aria-label": "controlled" }}
     activeComponent ===2 && <SelectVariants selectedProducts={selectedProducts}   />
 }
 {
-    activeComponent ===3 && <OrderInfo/>
+    activeComponent ===3 && <OrderInfo handleSubmitOrder={handleSubmitOrder}/>
 }
 
         {/* close next button */}
@@ -120,7 +137,11 @@ inputProps={{ "aria-label": "controlled" }}
           }
           {
             activeComponent ===3 && (
-                <button  className=" bg-[#83CBEB] hover:bg-[#5ebae2] text-white py-1 rounded-md border-2 border-blue-500 px-4">
+                <button
+                //  onClick={handleSubmitOrder} 
+                // onClick={() => orderInfoRef.current.submitOrder()}
+                onClick={() => document.getElementById('order-form').dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }))}
+                 className=" bg-[#83CBEB] hover:bg-[#5ebae2] text-white py-1 rounded-md border-2 border-blue-500 px-4">
                 Submit
               </button>
             )
