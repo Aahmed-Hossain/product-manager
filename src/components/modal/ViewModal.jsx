@@ -7,7 +7,7 @@ const ViewModal = ({ closeModal,product }) => {
     const {name, brand, type, origin, variants} = product;
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white rounded-md shadow-lg px-6 md:px-8 py-4 md:py-6 w-[90%]">
+      <div className="bg-white rounded-md shadow-lg px-6 md:px-8 py-4 md:py-6 w-[90%] max-h-full overflow-y-auto">
         <h3 className="font-bold text-lg text-center my-2 text-black">
           Create New Product
         </h3>
@@ -17,6 +17,7 @@ const ViewModal = ({ closeModal,product }) => {
 
             <Box sx={{ width: "100%" }}>
               <TextField
+              size="small"
                 sx={{ width: "100%" }}
                 id="outlined-name-input"
                 label="Name"
@@ -28,6 +29,7 @@ const ViewModal = ({ closeModal,product }) => {
 
             <Box sx={{ width: "100%" }}>
               <TextField
+              size="small"
                 sx={{ width: "100%" }}
                 id="outlined-brand-input"
                 label="Brand"
@@ -42,6 +44,7 @@ const ViewModal = ({ closeModal,product }) => {
  <InputLabel id="demo-simple-select-autowidth-label">Type</InputLabel>
         <Select 
         sx={{ width: "100%" }}
+        size="small"
           labelId="demo-simple-select-autowidth-label"
           id="demo-simple-select-autowidth"
           autoWidth
@@ -59,6 +62,8 @@ const ViewModal = ({ closeModal,product }) => {
         </Box>
             <Box sx={{ width: "100%" }}>
             <TextField
+            sx={{ width: "100%" }}
+            size="small"
               id="outlined-origin-input"
               label="Origin"
               type="text"
@@ -78,6 +83,7 @@ const ViewModal = ({ closeModal,product }) => {
 <Box key={idx} className="flex justify-between gap-2 w-full">
               <Box  sx={{ width: "100%" }}>
                 <TextField
+                size="small"
                   sx={{ width: "100%" }}
                   id={`outlined-color-input`}
                   label="Color"
@@ -89,6 +95,7 @@ const ViewModal = ({ closeModal,product }) => {
 
               <Box sx={{ width: "100%" }}>
                 <TextField
+                size="small"
                   sx={{ width: "100%" }}
                   id={`outlined-specification-input`}
                   label="Specification"
@@ -100,6 +107,7 @@ const ViewModal = ({ closeModal,product }) => {
 
               <Box sx={{ width: "100%" }}>
                 <TextField
+                size="small"
                   sx={{ width: "100%" }}
                   id={`outlined-size-input`}
                   label="Size"

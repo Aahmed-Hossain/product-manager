@@ -1,44 +1,28 @@
-import { useState } from 'react';
-import PropTypes from 'prop-types';
+/* eslint-disable react/prop-types */
 
-const SearchInput = ({ onSearch }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+const SearchInput = ({ seachQuery, handleSearch }) => {
 
   const handleInputChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const handleSearch = () => {
-    if (onSearch) {
-      onSearch(searchTerm);
-    }
+    handleSearch(e.target.value);
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      handleSearch(); 
-      setSearchTerm('');
+    if (e.key === "Enter") {
+      handleSearch(e.target.value);
     }
   };
 
   return (
-    <div className='flex items-center'>
+    <div className="flex items-center">
       <input
-        type='text'
-        value={searchTerm}
+        type="text"
+        value={seachQuery}
         onChange={handleInputChange}
-        onClick={handleSearch}
         onKeyPress={handleKeyPress}
         placeholder="Search..."
-        className='text-gray-400 font-semibold py-1 w-[10rem] md:w-[14rem] rounded-md border-2 border-[#83CBEB] text-xl mr-2 px-2'
+        className="text-gray-400 font-semibold py-1 w-[10rem] md:w-[14rem] rounded-md border-2 border-[#83CBEB] text-xl mr-2 px-2"
       />
     </div>
   );
 };
-
-SearchInput.propTypes = {
-  placeholder: PropTypes.string,
-  onSearch: PropTypes.func.isRequired,
-};
-
 export default SearchInput;

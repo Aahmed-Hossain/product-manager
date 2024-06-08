@@ -69,8 +69,8 @@ const EditProductModal = ({ closeModal, product,refetch }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white rounded-md shadow-lg px-6 md:px-8 py-4 md:py-6 w-[90%]">
-        <h3 className="font-bold text-lg text-center my-2">
+      <div className="bg-white rounded-md shadow-lg px-6 md:px-8 py-4 md:py-6 w-[90%] max-h-full overflow-y-auto">
+        <h3 className="font-bold text-lg text-center my-2 text-black">
           Create New Product
         </h3>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -79,6 +79,7 @@ const EditProductModal = ({ closeModal, product,refetch }) => {
 
             <Box sx={{ width: "100%" }}>
               <TextField
+              size="small"
                 sx={{ width: "100%" }}
                 {...register("name", { required: "Type is required" })}
                 id="outlined-name-input"
@@ -93,6 +94,7 @@ const EditProductModal = ({ closeModal, product,refetch }) => {
 
             <Box sx={{ width: "100%" }}>
               <TextField
+              size="small"
                 sx={{ width: "100%" }}
                 {...register("brand", {
                   required: "brand is required",
@@ -111,6 +113,7 @@ const EditProductModal = ({ closeModal, product,refetch }) => {
             <FormControl sx={{ width: "100%" }}>
  <InputLabel id="demo-simple-select-autowidth-label">Type</InputLabel>
         <Select 
+        size="small"
         sx={{ width: "100%" }}
         {...register("type", {
           required: "Type is required",
@@ -134,6 +137,7 @@ const EditProductModal = ({ closeModal, product,refetch }) => {
         </Box>
             <Box sx={{ width: "100%" }}>
             <TextField
+            size="small"
               sx={{ width: "100%" }}
               {...register("origin", {
                 required: "origin is required",
@@ -153,7 +157,7 @@ const EditProductModal = ({ closeModal, product,refetch }) => {
         </Box>
 
           
-<h3 className="text-xl font-semibold my-8 md:my-24 text-center">Variants</h3>
+<h3 className="text-xl font-semibold my-8 md:my-24 text-center text-black">Variants</h3>
 
 
 
@@ -164,6 +168,7 @@ const EditProductModal = ({ closeModal, product,refetch }) => {
             <Box key={idx} className="flex justify-between gap-2 w-full">
               <Box sx={{ width: "100%" }}>
                 <TextField
+                size="small"
                   {...register(`variants.${idx}.color`, {
                     required: "Color is required",
                   })}
@@ -177,6 +182,7 @@ const EditProductModal = ({ closeModal, product,refetch }) => {
 
               <Box sx={{ width: "100%" }}>
                 <TextField
+                size="small"
                   {...register(`variants.${idx}.specification`, {
                     required: "Specification is required",
                   })}
@@ -190,6 +196,7 @@ const EditProductModal = ({ closeModal, product,refetch }) => {
 
               <Box sx={{ width: "100%" }}>
                 <TextField
+                size="small"
                   {...register(`variants.${idx}.size`, {
                     required: "Size is required",
                   })}

@@ -5,16 +5,15 @@ import AddButton from "../shared/button/AddButton";
 import Pagination from "../shared/pagination/Pagination";
 import SearchInput from "../shared/button/SearchInput";
 import Header from "../shared/header/Header";
-import { useState } from "react";
+import {  useMemo, useState } from "react";
 import CreateModal from './../modal/CreateModal';
 import ViewModal from "../modal/ViewModal";
 import EditProductModal from "../modal/EditProductModal";
 import axios from "axios";
 import { toast } from "react-toastify";
+
 const ProductTable = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [searchedProducts, setSearchedProducts] = useState([]);
-  console.log(searchedProducts.data)
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -40,8 +39,13 @@ const ProductTable = () => {
     setShowEditModal(true);
   };
 
+  const [allProducts, refetch , isLoading,handleChangePage, currentPage, handleSearch,
+    seachQuery] = useAllProducts();
 
-  const [allProducts, refetch , isLoading] = useAllProducts();
+
+  const totolPage = useMemo(()=>Math.ceil(allProducts?.data?.total/10),[allProducts?.data?.total])
+
+  
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
@@ -52,29 +56,12 @@ const ProductTable = () => {
         sx={{
           display: "flex",
           justifyContent: "center",
-          marginTop: "6rem",
+          marginY: "6rem",
         }}
       >
         <CircularProgress sx={{ color: "#0F9ED5" }} />
       </Box>
     );
-
-
-   const handleSearch = async (searchTerm) => {
-    console.log("Searching for:", searchTerm);
-    try {
-      const response = await axios.get(`https://reactjr.coderslab.online/api/products`, {
-        params: {
-          search: searchTerm,
-          per_page: 10
-        }
-      });
-      setSearchedProducts(response.data.data);
-    } catch (err) {
-      console.error(err.message);
-    } 
-  }
-
 
   const handleDelete = (id) => {
     axios.delete(`https://reactjr.coderslab.online/api/products/${id}`)
@@ -87,15 +74,14 @@ const ProductTable = () => {
         console.error("Error deleting the item:", error);
       });
   };
-  // const productsToDisplay = searchedProducts?.data?.length > 0 ? searchedProducts?.data : allProducts;
   return (
     <div className="">
       <Header>{"Product"}</Header>
       <div className="px-1 md:px-4">
         <div className="flex justify-between mt-12 mb-3">
-          <AddButton onClick={openCreateModal}>Create</AddButton>
+          <AddButton  onClick={openCreateModal}>Create</AddButton>
           {showCreateModal && <CreateModal closeModal={closeModal} refetch={refetch} />}
-          <SearchInput onSearch={handleSearch}  />
+          <SearchInput seachQuery={seachQuery} handleSearch={handleSearch}  />
         </div>
         <table className="w-full border-separate">
           <thead>
@@ -142,9 +128,9 @@ const ProductTable = () => {
         </table>
 
         <Pagination
-          currentPage={1}
-          totalPages={4}
-          onPageChange={(page) => console.log(`Page changed to ${page}`)}
+          currentPage={currentPage}
+          totalPages={totolPage ?? 1}
+          onPageChange={(page) => handleChangePage(page)}
         />
       </div>
     </div>
