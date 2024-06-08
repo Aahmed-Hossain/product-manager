@@ -12,7 +12,6 @@ const OrdersTable = () => {
   const openCreateModal = () => {
     setShowCreateModal(true);
   };
-
   const closeModal = () => {
     setShowCreateModal(false);
 
