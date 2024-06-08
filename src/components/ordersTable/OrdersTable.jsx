@@ -6,6 +6,8 @@ import useAllOrders from "../../hooks/useAllOrders";
 import { Box, CircularProgress } from "@mui/material";
 import { useMemo, useState } from "react";
 import CreateOrderModal from "../modal/CreateOrderModal";
+import axios from "axios";
+import { toast } from "react-toastify";
 const OrdersTable = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
 
@@ -39,7 +41,19 @@ const OrdersTable = () => {
         <CircularProgress sx={{ color: "#0F9ED5" }} />
       </Box>
     );
+    
 
+    const handleDelete = (id) => {
+      axios.delete(`https://reactjr.coderslab.online/api/orders/${id}`)
+        .then((response) => {
+          console.log(response)
+          toast.success(`Order Deleted Successfully `);
+          refetch();
+        })
+        .catch((error) => {
+          console.error("Error deleting the item:", error);
+        });
+    };
   return (
     <div className="mt-48">
       <Header>{"Orders"}</Header>
@@ -84,7 +98,9 @@ const OrdersTable = () => {
                     Edit
                   </button>
                   |
-                  <button className=" hover:text-red-600">
+                  <button 
+                  onClick={()=>handleDelete(order.id)}
+                  className=" hover:text-red-600">
                     Delete
                   </button>
                 </td>
