@@ -2,9 +2,14 @@
 import { Checkbox } from "@mui/material";
 import useAllProducts from "../../hooks/useAllProducts";
 import SearchInput from "../shared/button/SearchInput";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import SelectVariants from "../createOrders/SelectVariants";
+import OrderInfo from "../createOrders/OrderInfo";
+import { AuthContext } from "../../providers/AuthProvider";
 
 const CreateOrderModal = ({ closeModal }) => {
+    const { selectedDetails} = useContext(AuthContext);
+    console.log("selectedDetails from modal", selectedDetails)
     const [activeComponent, setActiveComponent] = useState(1);
     const [selectedProducts, setSelectedProducts] = useState([]);
   const [allProducts, , , , , handleSearch, seachQuery] = useAllProducts();
@@ -26,13 +31,13 @@ const CreateOrderModal = ({ closeModal }) => {
     return selectedProducts.some(p => p.id === product.id);
   };
 
-
-
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-30">
-      <div className="bg-white rounded-md shadow-lg px-6 md:px-8 py-4 md:py-6 w-[90%] max-h-full overflow-y-auto">
+      <div className="bg-white rounded-md shadow-lg px-6 md:px-8 py-4 md:py-6 w-[99%] md:w-[90%] max-h-full overflow-y-auto">
         <h3 className="font-bold text-lg text-center my-4 ">
-          Create New Order
+        {activeComponent ===1 && <div>  Select Products</div>}
+        {activeComponent ===2 && <div>   Select Variants</div>}
+        {activeComponent ===3 && <div>  User Information</div>}
         </h3>
 
 {
@@ -78,14 +83,10 @@ inputProps={{ "aria-label": "controlled" }}
     )
 }
 {
-    activeComponent ===2 && <div>
-        second component
-    </div>
+    activeComponent ===2 && <SelectVariants selectedProducts={selectedProducts}   />
 }
 {
-    activeComponent ===3 && <div>
-        third component
-    </div>
+    activeComponent ===3 && <OrderInfo/>
 }
 
         {/* close next button */}
