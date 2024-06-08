@@ -4,8 +4,19 @@ import SearchInput from "../shared/button/SearchInput";
 import Header from "../shared/header/Header";
 import useAllOrders from "../../hooks/useAllOrders";
 import { Box, CircularProgress } from "@mui/material";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import CreateOrderModal from "../modal/CreateOrderModal";
 const OrdersTable = () => {
+  const [showCreateModal, setShowCreateModal] = useState(false);
+
+  const openCreateModal = () => {
+    setShowCreateModal(true);
+  };
+
+  const closeModal = () => {
+    setShowCreateModal(false);
+
+  };
   const [allOrders, refetch, isLoading, handleChangePage,
     currentPage,
     handleSearch,
@@ -31,11 +42,12 @@ const OrdersTable = () => {
     );
 
   return (
-    <div className="mt-12">
+    <div className="mt-48">
       <Header>{"Orders"}</Header>
       <div className="px-1 md:px-4">
         <div className="flex justify-between mt-12 mb-3">
-          <AddButton>Create</AddButton>
+          <AddButton onClick={openCreateModal}>Create</AddButton>
+          {showCreateModal && <CreateOrderModal closeModal={closeModal} refetch={refetch} />}
           <SearchInput seachQuery={seachQuery} handleSearch={handleSearch}  />
         </div>
         <table className="w-full border-separate">

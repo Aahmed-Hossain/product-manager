@@ -41,8 +41,6 @@ const ProductTable = () => {
 
   const [allProducts, refetch , isLoading,handleChangePage, currentPage, handleSearch,
     seachQuery] = useAllProducts();
-
-
   const totolPage = useMemo(()=>Math.ceil(allProducts?.data?.total/10),[allProducts?.data?.total])
 
   

@@ -57,7 +57,7 @@ const CreateModal = ({ closeModal,refetch }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white rounded-md shadow-lg px-6 md:px-8 py-4 md:py-6 w-[90%]">
+      <div className="bg-white rounded-md shadow-lg px-6 md:px-8 py-4 md:py-6 w-[90%] max-h-full overflow-y-auto">
         <h3 className="font-bold text-lg text-center my-2">
           Create New Product
         </h3>
