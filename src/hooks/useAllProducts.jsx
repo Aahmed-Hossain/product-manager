@@ -27,7 +27,7 @@ const useAllProducts = () => {
   };
 
   const debouncedRefetch = useCallback(
-    debounce(() => refetch(), 700),
+    debounce(() => refetch(), 600),
     []
   );
 
