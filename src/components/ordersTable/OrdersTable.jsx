@@ -8,16 +8,26 @@ import { useMemo, useState } from "react";
 import CreateOrderModal from "../modal/CreateOrderModal";
 import axios from "axios";
 import { toast } from "react-toastify";
+import ViewOrderModal from "../modal/ViewOrderModal";
 const OrdersTable = () => {
+  const [selectedOrder, setSelectedOrder] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showViewOrderModal, setShowViewOrderModal] = useState(false);
 
   const openCreateModal = () => {
     setShowCreateModal(true);
   };
   const closeModal = () => {
     setShowCreateModal(false);
+    setShowViewOrderModal(false)
 
   };
+
+  const openViewModal = (order) => {
+    setSelectedOrder(order);
+    setShowViewOrderModal(true);
+  };
+
   const [allOrders, refetch, isLoading, handleChangePage,
     currentPage,
     handleSearch,
@@ -41,7 +51,6 @@ const OrdersTable = () => {
         <CircularProgress sx={{ color: "#0F9ED5" }} />
       </Box>
     );
-    
 
     const handleDelete = (id) => {
       axios.delete(`https://reactjr.coderslab.online/api/orders/${id}`)
@@ -90,9 +99,12 @@ const OrdersTable = () => {
                   {formatDate(order.created_at)}
                 </td>
                 <td className="px-1 py-2 text-red-400 space-x-1">
-                  <button className=" hover:text-red-600">
+                  <button
+                   onClick={() => openViewModal(order)}
+                  className=" hover:text-red-600">
                     View
                   </button>
+                  {showViewOrderModal && <ViewOrderModal closeModal={closeModal}  order={selectedOrder}/>}
                   |
                   <button className=" hover:text-red-600">
                     Edit

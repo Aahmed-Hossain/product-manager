@@ -49,7 +49,7 @@ const OrderInfo = ({ handleSubmitOrder }) => {
             })}
             id="outlined-email-input"
             label="Email"
-            type="text"
+            type="email"
           />
           {errors.email && (
             <span className="text-red-500">*Email is required</span>
