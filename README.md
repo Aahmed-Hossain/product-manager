@@ -1,8 +1,45 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## pro-manager-vai: [Live Link](https://pro-manager-vai.vercel.app/)
 
-Currently, two official plugins are available:
+## Table of Contents
+- [Tech Stack](#tech-stack)
+- [Installation](#installation)
+- [Key Features](#key-features)
+- [Images](#images)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tech Stack
+- React.js
+- Tailwindcss
+- Material Ui
+- React-hook-form
+- tanstack/react-query
+- react-toastify
+- axios
+
+## Installation
+```bash
+git clone https://github.com/Aahmed-Hossain/product-manager
+cd product-manager
+npm install
+npm run dev
+```
+## Key Features
+#### Product Management
+- An user can create products
+- View products
+- Update Products
+- Delete Products.
+- Paginate products.
+- Search Products
+#### Order Management
+- An user can create orders
+- View orders
+- Update orders
+- Delete orders.
+- Paginate orders.
+- Search orders
+
+## Images
+![screencapture-pro-manager-vai-vercel-app-2024-06-09-09_33_23](https://github.com/Aahmed-Hossain/product-manager/assets/138388233/39c5838f-24a6-491b-b75b-dbd0cf88bfb1)
+
+
