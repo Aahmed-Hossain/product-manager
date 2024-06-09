@@ -5,9 +5,7 @@ import { Box } from "@mui/material";
 
 const ViewOrderModal = ({ closeModal, order }) => {
   const { name, address, details, email, total_quantity } = order;
-  console.log(order);
   const variants = details?.map((item) => item.variant);
-  console.log(variants);
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white rounded-md shadow-lg px-6 md:px-8 py-4 md:py-6 w-[90%] max-h-full overflow-y-auto">
