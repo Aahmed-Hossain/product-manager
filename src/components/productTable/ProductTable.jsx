@@ -72,6 +72,41 @@ const ProductTable = () => {
         console.error("Error deleting the item:", error);
       });
   };
+
+
+  const confirmDelete = (id,product) => {
+    toast.warn(
+      <div>
+        <p>{`Do you really want to delete ${product.name}?`}</p>
+        <div className="flex gap-4">
+          <button
+            className="bg-red-300 px-3 my-2 rounded-md"
+            onClick={() => {
+              handleDelete(id);
+              toast.dismiss();
+            }}
+          >
+            Yes
+          </button>
+          <button
+            className="bg-green-300 px-3 my-2 rounded-md"
+            onClick={() => toast.dismiss()}
+          >
+            No
+          </button>
+        </div>
+      </div>,
+      {
+        position: "top-center",
+        autoClose: false,
+        closeOnClick: true,
+        closeButton: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      }
+    );
+  };
   return (
     <div className="">
       <Header>{"Product"}</Header>
@@ -116,7 +151,7 @@ const ProductTable = () => {
                   </button>
                   {showEditModal && <EditProductModal closeModal={closeModal} refetch={refetch}  product={selectedProduct}/>}
                   |
-                  <button onClick={()=> handleDelete(product.id)} className="cursor-pointer hover:text-red-600">
+                  <button onClick={()=> confirmDelete(product.id, product)} className="cursor-pointer hover:text-red-600">
                     Delete
                   </button>
                 </td>

@@ -69,6 +69,48 @@ const OrdersTable = () => {
           console.error("Error deleting the item:", error);
         });
     };
+
+
+    const confirmDelete = (id,order) => {
+      toast.warn(
+        <div>
+          <p>{`Do you really want to delete ${order.name}?`}</p>
+          <div className="flex gap-4">
+            <button
+              className="bg-red-300 px-3 my-2 rounded-md"
+              onClick={() => {
+                handleDelete(id);
+                toast.dismiss();
+              }}
+            >
+              Yes
+            </button>
+            <button
+              className="bg-green-300 px-3 my-2 rounded-md"
+              onClick={() => toast.dismiss()}
+            >
+              No
+            </button>
+          </div>
+        </div>,
+        {
+          position: "top-center",
+          autoClose: false,
+          closeOnClick: true,
+          closeButton: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        }
+      );
+    };
+
+
+
+
+
+
+
   return (
     <div className="mt-48">
       <Header>{"Orders"}</Header>
@@ -122,7 +164,7 @@ const OrdersTable = () => {
                   {showEditOrderModal && <EditOrderModal closeModal={closeModal}  order={selectedOrder}/>}
                   |
                   <button 
-                  onClick={()=>handleDelete(order.id)}
+                  onClick={()=>confirmDelete(order.id, order)}
                   className=" hover:text-red-600">
                     Delete
                   </button>

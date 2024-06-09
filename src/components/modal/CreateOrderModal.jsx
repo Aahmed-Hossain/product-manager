@@ -74,7 +74,7 @@ const CreateOrderModal = ({ closeModal }) => {
             </tr>
           </thead>
           <tbody>
-            {allProducts?.data?.data?.map((product, idx) => (
+            {allProducts?.data?.data?.slice(0,5)?.map((product, idx) => (
               <tr
                 key={idx}
                 className="text-sm lg:font-medium  odd:bg-[#CCDFEF] even:bg-[#E7F0F7] text-center"
