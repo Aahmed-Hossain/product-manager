@@ -12,7 +12,9 @@ import { AuthContext } from "../../providers/AuthProvider";
 const SelectVariants = ({ selectedProducts }) => {
   const { setSelectedDetails } = useContext(AuthContext);
   const [selectedVariants, setSelectedVariants] = useState([]);
-  const [selectProductName, setSelectProductName] = useState("");
+   const [selectProductName, setSelectProductName] = useState(
+    selectedProducts.length > 0 ? selectedProducts[0].name : ""
+  );
   const productNames = selectedProducts.map((product) => product.name);
 
   const handleChange = (event) => {
@@ -81,7 +83,6 @@ const SelectVariants = ({ selectedProducts }) => {
             value={selectProductName}
             onChange={handleChange}
             label="Select Product"
-            defaultValue={selectProductName[0]}
           >
             {productNames?.map((productName, idx) => (
               <MenuItem key={idx} value={productName}>
