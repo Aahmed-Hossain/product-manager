@@ -18,7 +18,7 @@
 
 ## Installation
 ```bash
-git clone https://github.com/Aahmed-Hossain/product-manager
+git clone https://github.com/Aahmed-Hossain/product-manager.git
 cd product-manager
 npm install
 npm run dev
