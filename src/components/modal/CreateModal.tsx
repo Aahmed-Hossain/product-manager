@@ -54,7 +54,7 @@ const CreateModal = ({ closeModal,refetch }) => {
   const removeVariant = (id) => {
     setVariants(variants.filter(variant => variant.id !== id));
   };
-
+const  productType = ['Glass', 'Mug', 'Jug','Plate', 'Cup' ]
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white rounded-md shadow-lg px-6 md:px-8 py-4 md:py-6 w-[90%] max-h-full overflow-y-auto">
@@ -67,6 +67,7 @@ const CreateModal = ({ closeModal,refetch }) => {
 
             <Box sx={{ width: "100%" }}>
               <TextField
+              size="small"
                 sx={{ width: "100%" }}
                 {...register("name", { required: "Type is required" })}
                 id="outlined-name-input"
@@ -80,6 +81,7 @@ const CreateModal = ({ closeModal,refetch }) => {
 
             <Box sx={{ width: "100%" }}>
               <TextField
+              size="small"
                 sx={{ width: "100%" }}
                 {...register("brand", {
                   required: "brand is required",
@@ -97,6 +99,7 @@ const CreateModal = ({ closeModal,refetch }) => {
             <FormControl sx={{ width: "100%" }}>
  <InputLabel id="demo-simple-select-autowidth-label">Type</InputLabel>
         <Select 
+        size="small"
         sx={{ width: "100%" }}
         {...register("type", {
           required: "Type is required",
@@ -108,19 +111,24 @@ const CreateModal = ({ closeModal,refetch }) => {
           autoWidth
           label="Type"
         >
-          <MenuItem sx={{ width: "100%" }} value={'Mug'}>Mug</MenuItem>
 
-          <MenuItem sx={{ width: "100%" }} value={'Cup'}>Cup</MenuItem>
-          <MenuItem sx={{ width: "100%" }} value={'Glass'}>Glass</MenuItem>
- 
+{
+  productType?.map(product=>
+    ( <MenuItem sx={{ width: "100%" }} value={product}>{product}</MenuItem>)
+  )
+}
         </Select>
         </FormControl>
           {errors.items && (
             <span className="text-red-500">*Type is required</span>
           )}
         </Box>
+
+
+        
             <Box sx={{ width: "100%" }}>
             <TextField
+            size="small"
               sx={{ width: "100%" }}
               {...register("origin", {
                 required: "origin is required",
@@ -145,6 +153,7 @@ const CreateModal = ({ closeModal,refetch }) => {
             <Box key={variant.id} className="flex justify-between gap-2 w-full">
               <Box sx={{ width: "100%" }}>
                 <TextField
+                size="small"
                   sx={{ width: "100%" }}
                   {...register(`variants[${index}].color`, { required: "Color is required" })}
                   id={`outlined-color-input-${variant.id}`}
@@ -158,6 +167,7 @@ const CreateModal = ({ closeModal,refetch }) => {
 
               <Box sx={{ width: "100%" }}>
                 <TextField
+                size="small"
                   sx={{ width: "100%" }}
                   {...register(`variants[${index}].specification`, { required: "Specification is required" })}
                   id={`outlined-specification-input-${variant.id}`}
@@ -171,6 +181,7 @@ const CreateModal = ({ closeModal,refetch }) => {
 
               <Box sx={{ width: "100%" }}>
                 <TextField
+                size="small"
                   sx={{ width: "100%" }}
                   {...register(`variants[${index}].size`, { required: "Size is required" })}
                   id={`outlined-size-input-${variant.id}`}
