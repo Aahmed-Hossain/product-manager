@@ -9,10 +9,12 @@ import CreateOrderModal from "../modal/CreateOrderModal";
 import axios from "axios";
 import { toast } from "react-toastify";
 import ViewOrderModal from "../modal/ViewOrderModal";
+import EditOrderModal from "../modal/EditOrderModal";
 const OrdersTable = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showViewOrderModal, setShowViewOrderModal] = useState(false);
+  const [showEditOrderModal, setShowEditOrderModal] = useState(false);
 
   const openCreateModal = () => {
     setShowCreateModal(true);
@@ -20,12 +22,16 @@ const OrdersTable = () => {
   const closeModal = () => {
     setShowCreateModal(false);
     setShowViewOrderModal(false)
-
+    setShowEditOrderModal(false)
   };
 
   const openViewModal = (order) => {
     setSelectedOrder(order);
     setShowViewOrderModal(true);
+  };
+  const openEditOrderModal = (order) => {
+    setSelectedOrder(order);
+    setShowEditOrderModal(true);
   };
 
   const [allOrders, refetch, isLoading, handleChangePage,
@@ -105,10 +111,15 @@ const OrdersTable = () => {
                     View
                   </button>
                   {showViewOrderModal && <ViewOrderModal closeModal={closeModal}  order={selectedOrder}/>}
+               
                   |
-                  <button className=" hover:text-red-600">
+                  <button
+                  onClick={()=>openEditOrderModal(order)}
+                  className=" hover:text-red-600">
                     Edit
+
                   </button>
+                  {showEditOrderModal && <EditOrderModal closeModal={closeModal}  order={selectedOrder}/>}
                   |
                   <button 
                   onClick={()=>handleDelete(order.id)}

@@ -1,24 +1,33 @@
 /* eslint-disable react/prop-types */
 
-import { useForm , useFieldArray} from "react-hook-form";
+import { useForm } from "react-hook-form";
 import TextField from "@mui/material/TextField";
-import { Box,FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { Box, } from "@mui/material";
 import { toast } from "react-toastify";
 import axios from "axios";
+import useAllOrders from "../../hooks/useAllOrders";
 
-const EditOrderModal = ({ closeModal }) => {
+const EditOrderModal = ({ closeModal,order }) => {
+    const [,refetch] = useAllOrders();
+
+    const {address,email, name,total_quantity,details, id } = order;
+    console.log(order)
+    
+    const variantDetails = details?.map(variant => ({
+        quantity : variant.quantity,
+        variant_id: variant.variant.id
+    
+    }));
 
   const {
     register,
     handleSubmit,
     reset,
-    control,
+    // control,
     formState: { errors },
   } = useForm({
     defaultValues: {
-      name,
-      brand,
-      origin,
+        address,email, name,total_quantity,details,
 
     },
   });
@@ -26,19 +35,19 @@ const EditOrderModal = ({ closeModal }) => {
 
 
   const onSubmit = (data) => {
-    // console.log(data);
-    // console.log(data.variants)
     const updatedOrder = {
+      _methods: "PUT",
       name: data.name,
-      brand: data.brand,
-      type: data.type,
-      origin: data.origin,
-      variants: data.variants
+      email: data.email,
+      address: data.address,
+      total_quantity: data.total_quantity,
+      details: variantDetails
+    
     }
     axios.put(`https://reactjr.coderslab.online/api/orders/${id}`,updatedOrder).then((res) => {
       console.log(res);
-      toast.success(`Product created successfully.`);
-    //   refetch();
+      toast.success(`Order Updated successfully.`);
+      refetch();
       reset();
       closeModal();
     }).catch((err) => {
@@ -60,7 +69,7 @@ const EditOrderModal = ({ closeModal }) => {
         </h3>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Box sx={{ display: 'flex', justifyContent: 'center',}}>
-        <Box className="grid grid-cols-2 gap-2 w-10/12 md:w-2/3  justify-items-center">
+        <Box className="grid grid-cols-2 gap-2 w-11/12 md:w-2/3  justify-items-center">
 
             <Box sx={{ width: "100%" }}>
               <TextField
@@ -81,59 +90,51 @@ const EditOrderModal = ({ closeModal }) => {
               <TextField
               size="small"
                 sx={{ width: "100%" }}
-                {...register("brand", {
-                  required: "brand is required",
+                {...register("email", {
+                  required: "Email is required",
                 })}
                 id="outlined-brand-input"
-                label="Brand"
-                type="text"
-                defaultValue={brand}
+                label="Email"
+                type="email"
+                defaultValue={email}
               />
               {errors.brand && (
-                <span className="text-red-500">Brand is required</span>
+                <span className="text-red-500">Email is required</span>
               )}
             </Box >
 
             <Box sx={{ width: "100%" }}>
-            <FormControl sx={{ width: "100%" }}>
- <InputLabel id="demo-simple-select-autowidth-label">Type</InputLabel>
-        <Select 
-        size="small"
-        sx={{ width: "100%" }}
-        {...register("type", {
-          required: "Type is required",
-        })}
-          labelId="demo-simple-select-autowidth-label"
-          id="demo-simple-select-autowidth"
-          defaultValue={typeValue}
-          onChange={handleChange}
-          autoWidth
-          label="Type"
-        >
-          <MenuItem sx={{ width: "100%" }} value={'Mug'}>Mug</MenuItem>
-          <MenuItem sx={{ width: "100%" }} value={'Cup'}>Cup</MenuItem>
-          <MenuItem sx={{ width: "100%" }} value={'Glass'}>Glass</MenuItem>
- 
-        </Select>
-        </FormControl>
-          {errors.items && (
-            <span className="text-red-500">*Type is required</span>
-          )}
-        </Box>
-            <Box sx={{ width: "100%" }}>
             <TextField
             size="small"
               sx={{ width: "100%" }}
-              {...register("origin", {
-                required: "origin is required",
+              {...register("address", {
+                required: "address is required",
               })}
-              id="outlined-origin-input"
-              label="Origin"
+              id="outlined-address-input"
+              label="Address"
               type="text"
-              defaultValue={origin}
+              defaultValue={address}
             />
-            {errors.origin && (
-              <span className="text-red-500">Origin is required</span>
+            {errors.address && (
+              <span className="text-red-500">Address is required</span>
+            )}
+          </Box>
+
+
+          <Box sx={{ width: "100%" }}>
+            <TextField
+            size="small"
+              sx={{ width: "100%" }}
+              {...register("total_quantity", {
+                required: "total_quantity is required",
+              })}
+              id="outlined-total_quantity-input"
+              label="Total Quantity"
+              type="number"
+              defaultValue={total_quantity}
+            />
+            {errors.total_quantity && (
+              <span className="text-red-500">Total Quantity is required</span>
             )}
           </Box>
 
@@ -141,112 +142,6 @@ const EditOrderModal = ({ closeModal }) => {
           </Box>
         </Box>
 
-          
-<h3 className="text-xl font-semibold my-8 md:my-24 text-center text-black">Variants</h3>
-
-
-
-
-
-
-{fields.map((field, idx) => (
-            <Box key={idx} className="flex justify-between gap-2 w-full">
-              <Box sx={{ width: "100%" }}>
-                <TextField
-                size="small"
-                  {...register(`variants.${idx}.color`, {
-                    required: "Color is required",
-                  })}
-                  sx={{ width: "100%" }}
-                  id={`outlined-color-input`}
-                  label="Color"
-                  type="text"
-                  defaultValue={field.color}
-                />
-              </Box>
-
-              <Box sx={{ width: "100%" }}>
-                <TextField
-                size="small"
-                  {...register(`variants.${idx}.specification`, {
-                    required: "Specification is required",
-                  })}
-                  sx={{ width: "100%" }}
-                  id={`outlined-specification-input`}
-                  label="Specification"
-                  type="text"
-                  defaultValue={field.specification}
-                />
-              </Box>
-
-              <Box sx={{ width: "100%" }}>
-                <TextField
-                size="small"
-                  {...register(`variants.${idx}.size`, {
-                    required: "Size is required",
-                  })}
-                  sx={{ width: "100%" }}
-                  id={`outlined-size-input`}
-                  label="Size"
-                  type="text"
-                  defaultValue={field.size}
-                />
-              </Box>
-            </Box>
-          ))}
-
-
-
-
-
-
-
-
-
-{/* {
-    variants?.map((variant, idx)=> (
-<Box key={idx} className="flex justify-between gap-2 w-full">
-              <Box  sx={{ width: "100%" }}>
-                <TextField
-                 {...register("color", {
-                    required: "Color is required",
-                  })}
-                  sx={{ width: "100%" }}
-                  id={`outlined-color-input`}
-                  label="Color"
-                  type="text"
-              defaultValue={variant?.color}
-                />
-              </Box>
-
-              <Box sx={{ width: "100%" }}>
-                <TextField
-                {...register("specification", {
-                    required: "Specification is required",
-                  })}
-                  sx={{ width: "100%" }}
-                  id={`outlined-specification-input`}
-                  label="Specification"
-                  type="text"
-                  defaultValue={variant?.specification}
-                />
-              </Box>
-
-              <Box sx={{ width: "100%" }}>
-                <TextField
-                 {...register("size", {
-                    required: "Size is required",
-                  })}
-                  sx={{ width: "100%" }}
-                  id={`outlined-size-input`}
-                  label="Size"
-                  type="text"
-                  defaultValue={variant?.size}
-                />
-              </Box>
-            </Box>
-    ))
-} */}
 
 
           <div className="flex justify-end space-x-2">

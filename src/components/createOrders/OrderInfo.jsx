@@ -14,9 +14,8 @@ const OrderInfo = ({ handleSubmitOrder }) => {
   } = useForm();
 
   const onSubmit = (data) => {
-    const orderData = {name: data.name, email: data.email, address: data.address,total_quantity: totalQuantities, details: selectedDetails}
-
-    handleSubmitOrder(orderData); 
+    const newOrderData = {name: data.name, email: data.email, address: data.address,total_quantity: totalQuantities, details: selectedDetails}
+    handleSubmitOrder(newOrderData); 
   
   };
 

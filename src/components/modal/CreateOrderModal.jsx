@@ -29,9 +29,9 @@ const CreateOrderModal = ({ closeModal }) => {
   const isProductSelected = (product) => {
     return selectedProducts.some(p => p.id === product.id);
   };
-  const handleSubmitOrder = (orderData) => {
-    console.log(orderData);
-    axios.post(`https://reactjr.coderslab.online/api/orders`,orderData).then((res) => {
+  const handleSubmitOrder = (newOrderData) => {
+    // console.log(newOrderData);
+    axios.post(`https://reactjr.coderslab.online/api/orders`,newOrderData).then((res) => {
         console.log(res.data)
         toast.success(`Product created successfully.`);
         refetch();
